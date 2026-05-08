@@ -6,17 +6,25 @@ pipeline {
 
         stage('Terraform Init') {
             steps {
+                sh 'terraform init'
+            }
+        }
 
-                withCredentials([[
-                    $class: 'AmazonWebServicesCredentialsBinding',
-                    credentialsId: 'aws-creds'
-                ]]) {
+        stage('Terraform Validate') {
+            steps {
+                sh 'terraform validate'
+            }
+        }
 
-                    sh 'terraform init'
-                    sh 'terraform validate'
-                    sh 'terraform plan'
-                    sh 'terraform apply -auto-approve'
-                }
+        stage('Terraform Plan') {
+            steps {
+                sh 'terraform plan'
+            }
+        }
+
+        stage('Terraform Apply') {
+            steps {
+                sh 'terraform apply -auto-approve'
             }
         }
     }
